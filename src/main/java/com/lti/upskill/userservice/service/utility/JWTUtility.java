@@ -56,9 +56,6 @@ public class JWTUtility {
         } catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
             throw new BadCredentialsException("INVALID_CREDENTIALS", ex);
         }
-//        } catch (ExpiredJwtException ex) {
-//            throw new ex(header, claims, "Token has Expired", ex);
-//        }
     }
 
     public String getUsernameFromToken(String token) {
