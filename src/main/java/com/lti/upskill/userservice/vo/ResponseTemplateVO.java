@@ -1,4 +1,4 @@
-package com.lti.upskill.userservice.VO;
+package com.lti.upskill.userservice.vo;
 
 import com.lti.upskill.userservice.entity.User;
 import lombok.AllArgsConstructor;

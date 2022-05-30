@@ -1,7 +1,7 @@
 package com.lti.upskill.userservice.service;
 
-import com.lti.upskill.userservice.VO.Course;
-import com.lti.upskill.userservice.VO.ResponseTemplateVO;
+import com.lti.upskill.userservice.vo.Course;
+import com.lti.upskill.userservice.vo.ResponseTemplateVO;
 import com.lti.upskill.userservice.entity.User;
 import com.lti.upskill.userservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;

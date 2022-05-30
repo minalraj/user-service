@@ -33,29 +33,4 @@ public class User {
 
         private Long courseId;
 
-//        private boolean enabled = false;
-//        private @NotBlank boolean loggedIn;
-
-//        public boolean isLoggedIn() {
-//                return loggedIn;
-//        }
-//
-//        public void setLoggedIn(boolean loggedIn) {
-//                this.loggedIn = loggedIn;
-//        }
-//
-//        @Override
-//        public boolean equals(Object o) {
-//                if (this == o) return true;
-//                if (!(o instanceof User)) return false;
-//                User user = (User) o;
-//                return isEnabled() == user.isEnabled() && isLoggedIn() == user.isLoggedIn()
-//                        && Objects.equals(getId(), user.getId())
-//                        && Objects.equals(getPassword(), user.getPassword()) ;
-//        }
-//
-//        @Override
-//        public int hashCode() {
-//                return Objects.hash(getId(), getUsername(),getPassword(), isEnabled(), isLoggedIn());
-//        }
 }

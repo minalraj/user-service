@@ -1,4 +1,4 @@
-package com.lti.upskill.userservice.VO;
+package com.lti.upskill.userservice.vo;
 //VO - value objects
 
 import lombok.AllArgsConstructor;

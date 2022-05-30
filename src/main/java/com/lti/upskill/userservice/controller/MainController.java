@@ -1,6 +1,6 @@
 package com.lti.upskill.userservice.controller;
 
-import com.lti.upskill.userservice.VO.ResponseTemplateVO;
+import com.lti.upskill.userservice.vo.ResponseTemplateVO;
 import com.lti.upskill.userservice.entity.Status;
 import com.lti.upskill.userservice.entity.User;
 //import com.lti.upskill.userservice.event.RegistrationCompleteEvent;
@@ -170,38 +170,5 @@ public class MainController {
 
 
 
-
-
-
-
-    //@RequestMapping(value = "/register", method = RequestMethod.POST)
-//    public @ResponseBody
-//    User registerNewUser (@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password) {
-//           return userService.addUser(firstName, lastName, email, password);
-//    }
-    //above alternate
-//
-
-
-//
-//    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-//    public @ResponseBody User get(@PathVariable(required=false,name="id") Long id){
-//        return userService.getUser(id);
-//    }
-//
-//    @RequestMapping(value = "/get/all", method = RequestMethod.GET)
-//    public  @ResponseBody Iterable<User> getAll(){
-//        return userService.getAllUsers();
-//    }
-
-//    @RequestMapping(value = "/user", method = RequestMethod.GET)
-//    public String helloUser() {
-//        return "Hello World!! this is a user";
-//    }
-//
-//    @RequestMapping(value = "/admin", method = RequestMethod.GET)
-//    public String helloAdmin() {
-//        return "Hello World!! this is an admin";
-//    }
 
 
