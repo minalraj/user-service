@@ -26,11 +26,13 @@ public class User {
         private String lastName;
 
         @Column(name="user_name", length = 20)
-        private String username;
+        private String userName;
 
         @Column(name = "Role", nullable = false, length = 10)
         private  String role;
 
         private Long courseId;
+
+        private boolean userStatus;
 
 }

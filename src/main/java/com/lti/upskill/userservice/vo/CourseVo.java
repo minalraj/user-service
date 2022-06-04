@@ -1,6 +1,6 @@
 package com.lti.upskill.userservice.vo;
+//VO - value objects
 
-import com.lti.upskill.userservice.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseTemplateVO {
+public class CourseVo {
 
-    private User user;
-    private CourseVo course;
+    private Long courseId;
+    private String courseName;
+    private String courseDetails;
+    private String courseDuration;
 }

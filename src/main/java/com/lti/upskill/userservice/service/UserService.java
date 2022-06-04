@@ -1,13 +1,14 @@
 package com.lti.upskill.userservice.service;
 
-import com.lti.upskill.userservice.vo.Course;
+import com.lti.upskill.userservice.dto.LoginDto;
+import com.lti.upskill.userservice.exception.UserException;
+import com.lti.upskill.userservice.vo.CourseVo;
 import com.lti.upskill.userservice.vo.ResponseTemplateVO;
 import com.lti.upskill.userservice.entity.User;
 import com.lti.upskill.userservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import com.lti.upskill.userservice.model.UserModel;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,41 +34,69 @@ public class UserService implements UserDetailsService {
     @Autowired
     private RestTemplate restTemplate;
 
+//    public UserService(UserRepository mockUserRepository) {
+//    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //Logic to get user from database
         List<SimpleGrantedAuthority> roles = null;
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUserName(username);
         if (user != null) {
             roles = Arrays.asList(new SimpleGrantedAuthority(user.getRole()));
 
             //using fully qualified name as 2 imports of same name class not allowed (User)
             return new org.springframework.security.core.userdetails.User(
-                    user.getUsername(), user.getPassword(), roles);
+                    user.getUserName(), user.getPassword(), roles);
         }
         throw new UsernameNotFoundException("user : " + username + " is not found !");
 
     }
 
-    public User saveUser(UserModel userModel) {
-        User newUser = new User();
-        newUser.setFirstName(userModel.getFirstName());
-        newUser.setLastName(userModel.getLastName());
-        newUser.setUsername(userModel.getUsername());
-        newUser.setEmail(userModel.getEmail());
-        newUser.setRole(userModel.getRole());
-        newUser.setPassword(passwordEncoder.encode(userModel.getPassword()));    // this is the plain user provided pswd which we are  encrypting
-
+//    public User saveUser(User user) {
+//        User newUser = new User();
+//        newUser.setFirstName(user.getFirstName());
+//        newUser.setLastName(user.getLastName());
+//        newUser.setUserName(user.getUserName());
+//        newUser.setEmail(user.getEmail());
+//        newUser.setRole(user.getRole());
+//        newUser.setPassword(passwordEncoder.encode(user.getPassword()));    // this is the plain user provided pswd which we are  encrypting
+//
+//        log.info("Inside saveUser of UserService");
+//        userRepository.save(newUser);
+//        return newUser;
+//    }
+    //tetsing vo
+    public User saveUser(User user) {
         log.info("Inside saveUser of UserService");
-        userRepository.save(newUser);
-        return newUser;
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new UserException("EmailId is already registered");
+        }
+//        //check exists method
+//        else if (userRepository.existsByUsername(user.getUserName()).isPresent()) {
+//                throw new UserException("Username already exists");}
+            else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setUserStatus(true);
+            try {
+                User savedUser = userRepository.save(user);
+                System.out.println("Registration successful!");
+                return savedUser;
+            } catch (Exception e) {
+                throw new UserException(e.getMessage());
+            }
+        }
     }
 
 
     public User findUserById(Long userId) {
         log.info("Inside findUserById of UserService");
-        Optional<User> result = userRepository.findByUserId(userId);
-        return result.orElse(null);
+        Optional<User> user = userRepository.findByUserId(userId);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new UserException("User not found");
+        }
 
     }
 
@@ -74,25 +104,50 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public void deleteUser(Long userId) {
-        userRepository.delete(findUserById(userId));
+//    public void deleteUser(Long userId) {
+//        userRepository.delete(findUserById(userId));
+//
+//    }
 
+    public User deactivateUserById(Long userId) {
+        log.info("Inside deactivateUserById of UserService");
+        User user = findUserById(userId);
+        user.setUserStatus(false);
+        return userRepository.save(user);
+    }
+
+
+    public User userLogin(LoginDto loginDto) {
+        log.info("Inside userLogin of UserService");
+        Optional<User> user = userRepository.findByEmail(loginDto.getEmail());
+        if (!user.isPresent()) {
+            throw new UserException("Invalid email");
+        } else {
+            User loginUser = user.get();  //method in optional
+            byte[] decodedBytes = Base64.getDecoder().decode(loginUser.getPassword());
+            String decodedPassword = new String(decodedBytes);
+            if (decodedPassword.equals(loginDto.getPassword())) {
+                loginUser.setUserStatus(true);
+                userRepository.save(loginUser);
+                return loginUser;
+            } else {
+                throw new UserException("Invalid password");
+            }
+        }
     }
 
 
     public ResponseTemplateVO getUserWithCourse(Long userId) {
         log.info("Inside getUserWithCourse of userService");
         ResponseTemplateVO vo = new ResponseTemplateVO();
-        //User user = userRepository.findByUserId(userId);
         Optional<User> user = userRepository.findByUserId(userId);
-        //return user.orElse(null);
 
         if (user.isPresent()) {
-            User retrievedUser = user.get();
+            User retrievedUserWithCourse = user.get();
 
             //sending rest call to course microservice using the url
-            Course course = restTemplate.getForObject("http://COURSE-SERVICE/courses/" + retrievedUser.getCourseId(), Course.class);
-            vo.setUser(retrievedUser);
+            CourseVo course = restTemplate.getForObject("http://localhost:9002/courses/" + retrievedUserWithCourse.getCourseId(), CourseVo.class);
+            vo.setUser(retrievedUserWithCourse);
             vo.setCourse(course);
 
             return vo;

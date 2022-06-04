@@ -1,5 +1,4 @@
 package com.lti.upskill.userservice.vo;
-//VO - value objects
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,10 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Course {
+public class RegisterVo extends StatusVo{
 
-    private Long courseId;
-    private String courseName;
-    private String courseDetails;
-    private String courseDuration;
+    private long userId;
+    private String email;
+    private String userName;
 }
