@@ -1,4 +1,4 @@
-package com.lti.upskill.userservice.VO;
+package com.lti.upskill.userservice.vo;
 //VO - value objects
 
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Course {
+public class CourseVo {
 
     private Long courseId;
     private String courseName;

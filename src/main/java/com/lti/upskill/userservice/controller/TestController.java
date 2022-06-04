@@ -17,7 +17,7 @@ public class TestController {
 
         user.setFirstName("Andy");
         user.setLastName("Allen");
-        user.setUsername("andyallen");
+        user.setUserName("andyallen");
         user.setPassword("andy123");
         user.setEmail("andy.allen@gmail.com");
         user.setRole("USER");

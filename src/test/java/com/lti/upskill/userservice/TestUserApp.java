@@ -29,7 +29,7 @@ public class TestUserApp extends UserServiceApplicationTests {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.firstName").value("Andy"))
                 .andExpect(jsonPath("$.lastName").value("Allen"))
-                .andExpect(jsonPath("$.username").value("andyallen"))
+                .andExpect(jsonPath("$.userName").value("andyallen"))
                 .andExpect(jsonPath("$.password").value("andy123"))
                 .andExpect(jsonPath("$.email").value("andy.allen@gmail.com"))
                 .andExpect(jsonPath("$.role").value("USER"));
